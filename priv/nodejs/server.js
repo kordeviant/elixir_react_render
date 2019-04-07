@@ -1,12 +1,26 @@
 const ReactServer = require('react-dom/server')
 const React = require('react')
 const readline = require('readline')
+var path = require('path');
 
 require('@babel/polyfill')
 require('@babel/register')({
   presets: [
     [require.resolve('@babel/preset-env')],
     [require.resolve('@babel/preset-react')]
+  ],
+  plugins: [
+    require.resolve("@babel/plugin-proposal-class-properties"),
+    require.resolve("@babel/plugin-transform-destructuring"),
+    require.resolve("@babel/plugin-proposal-object-rest-spread"),
+    require.resolve("@babel/plugin-transform-classes"),
+    [
+      require.resolve("babel-plugin-react-css-modules"),
+      {
+        "removeImport": true,
+        "context": path.join(process.cwd(), "assets")
+      }
+    ]
   ]
 })
 
@@ -75,7 +89,7 @@ function startServer() {
   })
 }
 
-module.exports = {startServer, makeHtml}
+module.exports = { startServer, makeHtml }
 
 if (require.main === module) {
   startServer()
